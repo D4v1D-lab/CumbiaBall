@@ -11,6 +11,10 @@ task run(dependsOn: classes, type: JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+    // LWJGL 2 en macOS necesita el primer hilo; scripts/run.sh pasa esta propiedad.
+    if (System.getProperty('os.name').toLowerCase().contains('mac') || project.hasProperty('startOnFirstThread')) {
+        jvmArgs '-XstartOnFirstThread'
+    }
 }
 
 task debug(dependsOn: classes, type: JavaExec) {

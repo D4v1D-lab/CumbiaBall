@@ -1,0 +1,29 @@
+{
+  "name": "CumbiaBall (Java 11 + escritorio noVNC)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "11",
+      "jdkDistro": "tem",
+      "installGradle": false,
+      "installMaven": false
+    },
+    "ghcr.io/devcontainers/features/desktop-lite:1": {
+      "password": "vscode",
+      "webPort": "6080",
+      "vncPort": "5901"
+    }
+  },
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": {
+      "label": "Escritorio noVNC",
+      "onAutoForward": "notify"
+    }
+  },
+  "containerEnv": {
+    "DISPLAY": ":1"
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libxcursor1 libxrandr2 libxxf86vm1 libgl1-mesa-dri libopenal1 libgl1 mesa-utils",
+  "remoteUser": "vscode"
+}
