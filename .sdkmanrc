@@ -1,0 +1,5 @@
+# SDKMAN! — https://sdkman.io/usage#env
+# Fija Temurin 11 para este proyecto cuando entres a la carpeta con `sdk env`.
+# Si tu SDKMAN no tiene exactamente esta versión, usa la última 11.0.x-tem:
+#   sdk list java | grep tem
+java=11.0.33-tem

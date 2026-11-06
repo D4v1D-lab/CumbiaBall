@@ -1,3 +1,28 @@
+// ---------------------------------------------------------------------------
+// Verificación del entorno (JDK)
+// Gradle 6.7.1 solo corre en JDK 8–15 y LWJGL 2 no funciona con el JDK de
+// Microsoft. Falla temprano, con un mensaje útil, en vez de un error críptico.
+// ---------------------------------------------------------------------------
+def javaMajor = JavaVersion.current().majorVersion.toInteger()
+
+if (javaMajor < 8 || javaMajor > 15) {
+    throw new GradleException("""
+        Java ${javaMajor} detectado (${System.getProperty('java.version')}).
+        CumbiaBall necesita JDK 11 (Temurin recomendado); el rango soportado es 8–15.
+
+        Gradle 6.7.1 no funciona con Java 16 o superior, y LWJGL 2 no funciona
+        con el JDK de Microsoft. Revisa la sección "Instalación" del README.
+    """.stripIndent())
+}
+
+if (System.getProperty('java.vendor', '').contains('Microsoft')) {
+    logger.warn("""
+        ⚠️  JDK de Microsoft detectado (${System.getProperty('java.vendor')}).
+        LWJGL 2 falla con ese build: "libjawt.so: version 'SUNWprivate_1.1' not found".
+        Usa Temurin 11 (o Zulu 11) en su lugar.
+    """.stripIndent())
+}
+
 buildscript {
     
 
