@@ -1,1 +1,8 @@
-include 'desktop', 'android', 'core'
+rootProject.name = 'CumbiaBall'
+
+include 'desktop', 'core'
+
+// El módulo android queda fuera del build: usa AGP 3.5.4 (2019), compileSdk 30 y
+// el DSL anterior a AGP 8, incompatible con Gradle 9. Se reactivará cuando se
+// migre a AGP 9 (ver android/LEEME.md).
+// include 'android'

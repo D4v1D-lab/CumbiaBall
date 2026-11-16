@@ -14,7 +14,7 @@ if [ -n "${JAVA_HOME:-}" ] && [ -x "${JAVA_HOME}/bin/java" ]; then
 fi
 
 if ! command -v "$JAVA_BIN" >/dev/null 2>&1 && [ ! -x "$JAVA_BIN" ]; then
-  fail "No encontré ningún JDK. Instala Temurin 11 (https://adoptium.net) y vuelve a intentarlo."
+  fail "No encontré ningún JDK. Instala Temurin 17 (https://adoptium.net) y vuelve a intentarlo."
 fi
 
 version_line="$("$JAVA_BIN" -version 2>&1 | awk -F'"' '/version/ {print $2; exit}')"
@@ -28,24 +28,16 @@ case "$version_line" in
 esac
 
 # --- 2. Validar la versión ---------------------------------------------------
-if [ "$major" -lt 8 ] || [ "$major" -gt 15 ]; then
+if [ "$major" -lt 17 ] || [ "$major" -gt 25 ]; then
   fail "Java $version_line detectado (versión mayor $major).
-   Este proyecto necesita JDK 11 (Temurin recomendado); el rango soportado es 8–15.
-   Gradle 6.7.1 no funciona con Java 16 o superior.
+   Este proyecto necesita JDK 17 (Temurin recomendado); el rango soportado es 17–25.
+   Gradle 9 no funciona con versiones anteriores a Java 17.
    Revisa la sección \"Instalación\" del README."
 fi
 
-if [ "$major" -ne 11 ]; then
-  info "⚠️  Java $version_line detectado. Funciona, pero la combinación probada es Temurin 11."
+if [ "$major" -ne 17 ]; then
+  info "⚠️  Java $version_line detectado. Funciona, pero la combinación probada es Temurin 17."
 fi
-
-vendor="$("$JAVA_BIN" -XshowSettings:properties -version 2>&1 | awk -F'= ' '/java.vendor =/ {print $2; exit}')"
-case "$vendor" in
-  *Microsoft*)
-    info "⚠️  Estás usando el JDK de Microsoft ($vendor). LWJGL 2 falla ahí con"
-    info "    \"libjawt.so: version 'SUNWprivate_1.1' not found\". Usa Temurin 11."
-    ;;
-esac
 
 # --- 3. Pantalla -------------------------------------------------------------
 if [ "${CODESPACES:-}" = "true" ] || [ -z "${DISPLAY:-}" ]; then

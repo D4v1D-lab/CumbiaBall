@@ -1,9 +1,12 @@
 # 🎮 CumbiaBall
 
-Un juego de plataformas 2D hecho con [libGDX](https://libgdx.com/): controlas un balón que salta de plataforma en plataforma, esquiva pinchos y llega a la meta mientras suena música de cumbia. Hay dos niveles y una pantalla de "game over" con reintento.
+Juego de plataformas 2D hecho con [libGDX](https://libgdx.com/): controlas un balón que salta de plataforma en plataforma, esquiva pinchos y llega a la meta mientras suena música de cumbia. Tiene dos niveles y una pantalla de *game over* con reintento.
 
-<!-- Si tienes una captura o GIF del juego, guárdalo en docs/captura.gif y descomenta la línea siguiente. -->
-<!-- ![Captura de CumbiaBall](docs/captura.gif) -->
+![Menú de CumbiaBall](docs/menu.png)
+
+![Nivel jugable](docs/juego.png)
+
+> ℹ️ El arte del menú todavía dice "360 Jump": es el nombre original de los recursos gráficos. Se puede cambiar cuando se renueven los assets.
 
 ---
 
@@ -11,20 +14,29 @@ Un juego de plataformas 2D hecho con [libGDX](https://libgdx.com/): controlas un
 
 | Qué necesitas | Detalle |
 |---|---|
-| **Java** | **JDK 11 — Temurin recomendado** (probado con 11.0.x) |
-| Rango soportado | Java 8 a 15. Fuera de ese rango el proyecto no arranca |
-| ⚠️ Evita | Java 16 o superior, y el **JDK de Microsoft** (ver solución de problemas) |
+| **Java** | **JDK 17 — Temurin recomendado** (probado con 17.0.21) |
+| Rango soportado | Java 17 a 25 |
 | Sistema | Windows, macOS, Linux o GitHub Codespaces |
-| Gradle | No hace falta instalarlo: el repo trae el wrapper (`./gradlew`) |
+| Gradle | No hace falta instalarlo: el repo trae el wrapper 9.9.1 |
 
-> ⚠️ **No uses Java 16, 17, 21 ni 25.** El proyecto usa Gradle 6.7.1, que solo funciona hasta Java 15. Si ves `Unsupported class file major version`, es exactamente eso.
+> ⚠️ **Java 16 o anterior no sirve.** Gradle 9 exige JDK 17 como mínimo. Si ves un error de versión de clase o de Gradle, es exactamente eso.
+
+### Stack actual
+
+| Componente | Versión |
+|---|---|
+| Java | 17 |
+| Gradle | 9.9.1 |
+| libGDX | 1.14.2 |
+| Backend de escritorio | LWJGL 3 (GLFW) |
+| Física | Box2D |
 
 ---
 
 ## ☁️ Opción A — Jugar en GitHub Codespaces (sin instalar nada)
 
 1. Entra al repo y pulsa **Code → Codespaces → Create codespace on master**.
-2. Espera a que termine de construirse el contenedor (la primera vez tarda unos minutos: instala Java 11 y las librerías gráficas).
+2. Espera a que termine de construirse el contenedor (la primera vez tarda unos minutos: instala Java 17 y las librerías gráficas).
 3. Abre la pestaña **Ports** (junto a la Terminal) y busca el puerto **6080 — Escritorio noVNC**. Pulsa el icono del globo para abrirlo.
 4. Ingresa la contraseña: **`vscode`**.
 5. En el escritorio remoto, abre una terminal (icono de terminal en la barra o clic derecho → *Open Terminal Here*) y ejecuta:
@@ -37,32 +49,32 @@ Un juego de plataformas 2D hecho con [libGDX](https://libgdx.com/): controlas un
 
 > 💡 También puedes lanzarlo desde la terminal normal de VS Code: el contenedor ya trae `DISPLAY=:1`, así que la ventana se dibuja en el escritorio de noVNC.
 >
-> 🔇 En Codespaces no hay tarjeta de sonido. Verás `Couldn't initialize audio` y el juego seguirá funcionando sin sonido: es lo esperado.
+> 🔇 En Codespaces no hay tarjeta de sonido. Verás avisos de ALSA y el juego seguirá funcionando sin sonido: es lo esperado.
 
 ---
 
 ## 💻 Opción B — Jugar en tu computador
 
-### 1. Instala Java 11 (Temurin)
+### 1. Instala Java 17 (Temurin)
 
 **Windows**
 
 ```powershell
-winget install EclipseAdoptium.Temurin.11.JDK
+winget install EclipseAdoptium.Temurin.17.JDK
 ```
 
 **macOS** (con Homebrew)
 
 ```bash
-brew install --cask temurin@11
+brew install --cask temurin@17
 ```
 
-**Linux (Debian/Ubuntu)** — descarga el `.tar.gz` de [Adoptium](https://adoptium.net/temurin/releases/?version=11), descomprímelo y apunta `JAVA_HOME` a esa carpeta.
+**Linux (Debian/Ubuntu)** — descarga el `.tar.gz` de [Adoptium](https://adoptium.net/temurin/releases/?version=17), descomprímelo y apunta `JAVA_HOME` a esa carpeta.
 
 **Cualquier sistema con [SDKMAN!](https://sdkman.io/)**
 
 ```bash
-sdk env install     # lee .sdkmanrc y baja Temurin 11
+sdk env install     # lee .sdkmanrc y baja Temurin 17
 sdk env             # activa esa versión en la sesión actual
 ```
 
@@ -70,7 +82,7 @@ Comprueba que quedó bien:
 
 ```bash
 java -version
-# openjdk version "11.0.x" ...
+# openjdk version "17.0.x" ...
 ```
 
 ### 2. Clona el repositorio
@@ -94,7 +106,7 @@ cd CumbiaBall
 scripts\run.bat
 ```
 
-El script verifica tu versión de Java, avisa si algo no cuadra y arranca `./gradlew desktop:run`. Si prefieres hacerlo a mano: `./gradlew desktop:run`.
+El script verifica tu versión de Java, avisa si algo no cuadra y arranca `./gradlew desktop:run`.
 
 ---
 
@@ -114,38 +126,38 @@ Objetivo: avanzar por las plataformas sin tocar los pinchos y alcanzar la bander
 
 ## 🔧 Solución de problemas
 
-**`Unsupported class file major version 69`**
-Estás usando Java 25 (o cualquier versión 16+). Gradle 6.7.1 no puede ejecutarse ahí. Instala Temurin 11 y asegúrate de que `java -version` lo confirme. Si usas SDKMAN, ejecuta `sdk env`.
-
-**`libjawt.so: version 'SUNWprivate_1.1' not found`**
-Estás con el JDK de Microsoft (`msopenjdk`). LWJGL 2 no es compatible con ese build. Desinstálalo o cambia `JAVA_HOME` a un Temurin 11 (o Zulu 11) y detén el daemon: `./gradlew --stop`.
+**`Gradle requires JVM 17 or later to run` / `Unsupported class file major version`**
+Tu `java` es más antiguo (o más nuevo) que el rango soportado. Instala Temurin 17 y confirma con `java -version`. Con SDKMAN: `sdk env`. El script `run.sh` lo detecta antes de arrancar Gradle y te dice qué versión tiene.
 
 **`libXcursor.so.1: cannot open shared object file`**
-Faltan librerías gráficas de X11. En Debian/Ubuntu:
+Faltan librerías gráficas de X11 que usa GLFW. En Debian/Ubuntu:
 
 ```bash
 sudo apt-get update && sudo apt-get install -y \
-  libxcursor1 libxrandr2 libxxf86vm1 libgl1-mesa-dri libopenal1 libgl1 mesa-utils
+  libxcursor1 libxrandr2 libxxf86vm1 libxi6 libgl1-mesa-dri libopenal1 libgl1 mesa-utils
 ```
 
 En Codespaces esto ya lo instala el `postCreateCommand` del devcontainer. Si acabas de cambiar el devcontainer, reconstruye el contenedor (*Command Palette → Codespaces: Rebuild Container*).
 
-**`Could not open X display connection` / pantalla en negro en noVNC**
-No hay servidor gráfico disponible. En Codespaces: confirma que el puerto **6080** está abierto, entra con la contraseña `vscode` y ejecuta el juego **dentro** del escritorio remoto. En Linux sin entorno gráfico, define `export DISPLAY=:1` solo si tienes un servidor X (Xvfb o noVNC) corriendo ahí. En macOS, el script ya añade `-XstartOnFirstThread`.
+**`GLFW_FEATURE_UNAVAILABLE ... Wayland: The platform does not support setting the input focus`**
+Aviso informativo en Wayland (habitual en WSLg): la ventana se abre y el juego funciona. Solo importa si la ventana no aparece.
 
-**`Couldn't initialize audio`**
-Es normal en Codespaces y en equipos sin tarjeta de sonido. El juego se ejecuta igual, sin audio; no es un error del proyecto.
+**Pantalla en negro en noVNC / la ventana no aparece**
+Confirma que el puerto **6080** está abierto y entra con la contraseña `vscode`; ejecuta el juego **dentro** del escritorio remoto. En Linux sin entorno gráfico no hay dónde dibujar: necesitas un servidor X (Xvfb, XWayland o noVNC).
 
-**Cambié de Java y sigue fallando con el Java viejo**
-El daemon de Gradle conserva el JDK con el que se inició. Deténlo y vuelve a lanzar:
+**Avisos de ALSA / `Couldn't initialize audio`**
+No hay tarjeta de sonido (Codespaces, contenedores, servidores). El juego se ejecuta igual, sin audio.
+
+**Cambié de Java y sigue usando el viejo**
+El daemon de Gradle conserva el JDK con el que se inició:
 
 ```bash
 ./gradlew --stop
 ./scripts/run.sh
 ```
 
-**VS Code no reconoce Java 11**
-El repo no fija rutas de JDK (para no romper en otras máquinas). Abre la paleta de comandos → **Java: Configure Java Runtime** y selecciona tu Temurin 11, o define `JAVA_HOME` antes de abrir VS Code. Las extensiones recomendadas se instalan solas al abrir el proyecto.
+**VS Code no reconoce Java 17**
+El repo no fija rutas de JDK (para no romper en otras máquinas). Abre la paleta de comandos → **Java: Configure Java Runtime** y selecciona tu Temurin 17, o define `JAVA_HOME` antes de abrir VS Code.
 
 ---
 
@@ -154,17 +166,33 @@ El repo no fija rutas de JDK (para no romper en otras máquinas). Abre la paleta
 ```
 CumbiaBall/
 ├── core/                 Lógica del juego (pantallas, entidades, física Box2D)
-├── desktop/              Launcher de escritorio (LWJGL 2) y tarea `run`
-├── android/              Módulo Android y assets del juego (android/assets)
+├── desktop/              Launcher LWJGL 3 y tarea `run`
+├── android/              Módulo Android heredado (fuera del build, ver LEEME.md)
 ├── assets/               Imágenes sueltas usadas por el módulo Android
+├── docs/                 Capturas para el README
 ├── scripts/              run.sh (Linux/macOS/Codespaces) y run.bat (Windows)
 ├── .devcontainer/        Entorno reproducible de Codespaces
+├── .github/workflows/    Compilación en Linux, Windows y macOS
 ├── .vscode/              Extensiones y configuración recomendadas
 ├── build.gradle          Configuración raíz y verificación del JDK
-└── gradlew, gradlew.bat  Gradle Wrapper 6.7.1
+└── gradlew, gradlew.bat  Gradle Wrapper 9.9.1
 ```
 
-> ℹ️ El módulo `desktop` toma las imágenes y sonidos de `android/assets`, por eso el `workingDir` de la tarea `run` apunta ahí.
+> ℹ️ El módulo `desktop` toma las imágenes y sonidos de `android/assets`, por eso el `workingDir` de la tarea `run` apunta ahí. El módulo `android` está **excluido de `settings.gradle`** porque su AGP 3.5.4 es incompatible con Gradle 9; se reactivará cuando se migre a AGP 9.
+
+---
+
+## 🧩 Usar este proyecto como plantilla
+
+Este repo es la base para nuevos juegos (por ejemplo, el de Sofi). Para arrancar uno:
+
+1. Copia el repo y cambia `appName` y `gdxVersion` en `build.gradle`.
+2. Renombra el paquete `com.mygdx.game` y actualiza `mainClassName` en `desktop/build.gradle`.
+3. Sustituye los assets de `android/assets` (y su carpeta hermana `assets/`) por los nuevos.
+4. Cambia el título en `DesktopLauncher.java` (`config.setTitle(...)`).
+5. Ajusta el README y las capturas de `docs/`.
+
+Todo lo demás — wrapper, verificación de JDK, scripts, devcontainer, CI y configuración de VS Code — ya viene resuelto.
 
 ---
 
@@ -174,7 +202,7 @@ CumbiaBall/
 2. Haz tus cambios y pruébalos con `./scripts/run.sh`.
 3. Abre un Pull Request describiendo qué cambiaste y cómo lo probaste.
 
-No actualices Gradle ni las versiones de libGDX sin discutirlo antes: el proyecto está fijado a versiones antiguas a propósito y migrarlo implica cambios mayores.
+Mantén las versiones del stack al día (Java 17, libGDX 1.14.x, Gradle 9.x): son la principal defensa contra la obsolescencia.
 
 ## 📄 Licencia
 
