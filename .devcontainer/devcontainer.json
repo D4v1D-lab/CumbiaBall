@@ -1,9 +1,9 @@
 {
-  "name": "CumbiaBall (Java 11 + escritorio noVNC)",
+  "name": "CumbiaBall (Java 17 + escritorio noVNC)",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
-      "version": "11",
+      "version": "17",
       "jdkDistro": "tem",
       "installGradle": false,
       "installMaven": false
@@ -24,6 +24,6 @@
   "containerEnv": {
     "DISPLAY": ":1"
   },
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libxcursor1 libxrandr2 libxxf86vm1 libgl1-mesa-dri libopenal1 libgl1 mesa-utils",
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libxcursor1 libxrandr2 libxxf86vm1 libxi6 libgl1-mesa-dri libopenal1 libgl1 mesa-utils",
   "remoteUser": "vscode"
 }
